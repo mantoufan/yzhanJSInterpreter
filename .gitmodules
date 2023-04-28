@@ -1,0 +1,3 @@
+[submodule "src/img/lib/realcugan-ncnn-vulkan"]
+	path = src/img/lib/realcugan-ncnn-vulkan
+	url = git@github.com:nihui/realcugan-ncnn-vulkan.git
