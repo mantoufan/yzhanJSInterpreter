@@ -19,6 +19,9 @@ sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-jammy.list http://packages.l
 sudo apt update
 sudo apt install libc6
 sudo apt install vulkan-sdk
+# vulkaninfo  check if vulkan has been installed successful 
+ls /usr/share/vulkan/
+export VULKAN_SDK=/usr/share/vulkan
 ```
 ### Download Source Code
 ```shell
@@ -33,10 +36,11 @@ sudo apt-get install cmake
 mkdir build
 cd build
 sudo cmake ../src
-cmake --build . -j 4
+sudo cmake --build . -j 4
 ```
 ### Build WASM
 ```shell
+# cd yzhanTool/src/img/lib/realcugan-ncnn-vulkan
 mkdir build-wasm
 cd build-wasm
 CMAKE_TOOLCHAIN_FILE=/home/y/github/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
