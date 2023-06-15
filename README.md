@@ -1,48 +1,59 @@
-# yzhanTools
-A small tools zoome images using Real-CUGAN in bowsers offline.
+# yzhanJSInterpreter  
+![npm](https://img.shields.io/npm/v/yzhanjsinterpreter)
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/yzhanjsinterpreter)
+![npm](https://img.shields.io/npm/dt/yzhanjsinterpreter)
+[![GitHub license](https://img.shields.io/github/license/mantoufan/yzhanjsinterpreter)](https://github.com/mantoufan/yzhanjsinterpreter/blob/main/LICENSE)  
+A JavaScript Interpreter Using JS itself  
+JavaScript 解释器，包含词法分析、语法解析和执行
+## Demo
+You could change JavaScript Code and view the result in realtime.  
+[Online Demo](https://mantoufan.github.io/yzhanJSInterpreter)  
+![DEMO PNG](https://s2.loli.net/2023/06/15/lwu5Cat9gox27dR.png)
 ## Setup
-### Install Emsdk
-```shell
-git clone https://github.com/emscripten-core/emsdk.git
-cd emsdk
-git pull
-./emsdk install latest
-./emsdk activate latest
-source ./emsdk_env.sh
+### Node.js
+```javascript
+npm i yzhanjsinterpreter
+import yzhanJSInterpreter from 'yzhanjsinterpreter'
 ```
-### Install Vulkan SDK
-```shell
-sudo apt update
-sudo apt upgrade
-wget -qO- https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo tee /etc/apt/trusted.gpg.d/lunarg.asc
-sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-jammy.list http://packages.lunarg.com/vulkan/lunarg-vulkan-jammy.list
-sudo apt update
-sudo apt install libc6
-sudo apt install vulkan-sdk
-# vulkaninfo  check if vulkan has been installed successful 
-ls /usr/share/vulkan/
-export VULKAN_SDK=/usr/share/vulkan
+### Browser
+```html
+<script src="https://cdn.jsdelivr.net/npm/yzhanjsinterpreter@latest/docs/yzhanjsinterpreter.min.js"></script>
 ```
-### Download Source Code
+## Usage
+### Declaration Code
+```javascript
+const code = `let a = 1;
+let b = 1;
+a <<= b++;
+for (let i = 0; i < 10; i++) {
+  if (i % 2 === 0) continue;
+  if ((i | 2) == '11') break;
+  a++;
+}
+undefined && 1 ?? (0 || a + b);`
+```
+### Lexical Analyzer
+```javascript
+const lexResult = yzhanJSInterpreter.lex(code)
+```
+### Syntax Parser
+```javascript
+const parseResults = yzhanJSInterpreter.parse(lexResult)
+```
+### Executor
+```javascript
+const executeResult = yzhanJSInterpreter.execute(parseResults[0])
+```
+## Development
+### Unit Testing
 ```shell
-git clone git@github.com:mantoufan/yzhanTool.git
-cd yzhanTool/src/img/lib/realcugan-ncnn-vulkan
-git submodule update --init --recursive
+npm test
 ```
 ### Build
 ```shell
-# cd yzhanTool/src/img/lib/realcugan-ncnn-vulkan
-sudo apt-get install cmake
-mkdir build
-cd build
-sudo cmake ../src
-sudo cmake --build . -j 4
+npm run build
 ```
-### Build WASM
+### Preview
 ```shell
-# cd yzhanTool/src/img/lib/realcugan-ncnn-vulkan
-mkdir build-wasm
-cd build-wasm
-CMAKE_TOOLCHAIN_FILE=/home/y/github/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
-emcmake cmake ../src
+npm run dev
 ```
