@@ -1,6 +1,8 @@
 const Reference = require('../classes/Reference')
 const Enviroment = require('../classes/Environment')
 const Completion = require('../classes/Completion')
+const JSObject = require('../classes/JSObject')
+const JSFunction = require('../classes/JSFunction')
 
 const globalEnv = new Enviroment()
 
@@ -12,6 +14,13 @@ const getValue = node => {
 
 const executor = {
   envStack: [globalEnv],
+  microTaskQueue: [], // 微任务队列
+  runTaskQueue: [], // 宏任务队列
+  runTask() {
+    
+    
+    // this.microTaskQueue;
+  },
   get currentEnv(){
     return this.envStack[this.envStack.length - 1]
   },
@@ -20,7 +29,7 @@ const executor = {
   },
   Parameters(node) {
     if (node.children.length === 1) {
-      return evalute(node.children[0])
+      return execute(node.children[0])
     } else {
       const left = getValue(node.children[0]) ?? []
       const right = getValue(node.children[2])
@@ -28,18 +37,28 @@ const executor = {
     }
   },
   FunctionDeclaration(node) {
-    if (node.children.length === 7) {
-      // todo: ['function', 'Identifier', '(', ')', '{', 'StatementList', '}']
-    } else {
-      // todo: ['function', 'Identifier', '(', 'Parameters', ')', '{', 'StatementList', '}']
+    if (node.children.length === 5) {
+      const functionName = node.children[1].value
+      const functionBody = node.children[4]
+      const jsFunction = new JSFunction(functionBody, this, this.currentEnv)
+      this.currentEnv.set(functionName, jsFunction)
+      return jsFunction
+    } else if (node.children.length === 6) {
+      const functionName = node.children[1].value
+      const parameters = execute(node.children[3])
+      const functionBody = node.children[5]
+      const jsFunction = new JSFunction(functionBody, this, this.currentEnv, parameters)
+      this.currentEnv.set(functionName, jsFunction)
+      return jsFunction
     }
   },
   Declaration(node) {
+    if (node.children.length === 1) return execute(node.children[0])
     this.currentEnv.set(node.children[1].value, void 0)
     const ref = execute(node.children[1])
     ref.set(execute(node.children[3]))
   },
-  NumberLiteral(node) {
+  NumbericLiteral(node) {
     return node.value * 1
   },
   StringLiteral(node) {
@@ -50,6 +69,21 @@ const executor = {
   },
   NullLiteral() {
     return null
+  },
+  ObjectLiteral(node) {
+    const jsObject = new JSObject()
+    if (node.children.length === 3 || node.children.length === 4) {
+      const propertyDefinitionList = node.children[1].children
+      propertyDefinitionList.forEach(({ children: propertyDefinition }) => {
+        const propertyName = execute(propertyDefinition[0])
+        const res = execute(propertyDefinition[2])
+        const propertyValue = typeof res !== 'object' || res instanceof JSObject ? {
+          value: res
+        } : res
+        jsObject.setProperty(propertyName, propertyValue)
+      })
+    }
+    return jsObject
   },
   Literal(node) {
     return execute(node.children[0])
@@ -65,9 +99,9 @@ const executor = {
     if (node.children.length === 1) {
       return execute(node.children[0])
     } else if (node.children.length === 3) {
-      return new Reference(evalute(node.children[0]), node.children[2])
+      return new Reference(execute(node.children[0]), node.children[2])
     } else {
-      return new Reference(evalute(node.children[0]), evalute(node.children[2]))
+      return new Reference(execute(node.children[0]), execute(node.children[2]))
     }
   },
   NewExpression(node) {

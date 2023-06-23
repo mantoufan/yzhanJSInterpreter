@@ -1,43 +1,48 @@
+
 const { lex, parse, execute, globalEnv } = require('../../src/index')
-describe('Test Homework', () => {
+describe('Test Arguments', () => {
   const map = new Map([
-    ['Parameters', [
-      ['Identifier'], 
-      ['Parameters', ',', 'Identifier']
+    ['PropertyDefinition', [
+      ['StringLiteral', ':', 'Expression'],
+      ['NumbericLiteral', ':', 'Expression']
     ]],
-    ['FunctionDeclaration', [
-      ['function', 'Identifier', '(', ')', '{', 'StatementList', '}'],
-      ['function', 'Identifier', '(', 'Parameters', ')', '{', 'StatementList', '}']
+    ['PropertyDefinitionList', [
+      ['PropertyDefinition'],
+      ['PropertyDefinitionList', ':', 'PropertyDefinition']
     ]],
-    ['Declaration', [
-      ['FunctionDeclaration'],
-      ['var', 'Identifier', '=', 'Expression', ';'], 
-      ['let', 'Identifier', '=', 'Expression', ';'], 
-      ['const', 'Identifier', '=', 'Expression', ';']
+    ['ObjectLiteral', [
+      ['{', '}'],
+      ['{', 'PropertyDefinitionList', '}'],
+      ['{', 'PropertyDefinitionList', ',', '}'],
     ]],
     ['Literal', [
       ['NumbericLiteral'], 
       ['StringLiteral'], 
       ['BooleanLiteral'], 
-      ['NullLiteral']
+      ['NullLiteral'],
+      ['ObjectLiteral'],
     ]],
     ['Primary', [
       ['(', 'Expression', ')'], 
       ['Literal'], 
       ['Identifier']
     ]],
+    ['Arguments', [
+      ['AssignmentExpression'],
+      ['Arguments', ',', 'AssignmentExpression']
+    ]],
     ['MemberExpression', [
       ['Primary'], 
       ['MemberExpression', '.', 'Identifier'], 
-      ['MemberExpression', '[', 'Expression', ']']
+      ['MemberExpression', '[', 'Expression', ']'],
+      ['new', 'MemberExpression', '(', 'Arguments', ')'],
+      ['MemberExpression', '(', ')'],
     ]],
     ['NewExpression', [
       ['MemberExpression'], 
       ['new', 'NewExpression']
     ]],
     ['CallExpression', [
-      ['new', 'MemberExpression', '(', ')'],
-      ['MemberExpression', '(', ')'],
       ['CallExpression', '.', 'Identifier'],
       ['CallExpression', '[', 'Expression', ']'],
       ['CallExpression', '(', 'Arguments', ')']
@@ -129,6 +134,20 @@ describe('Test Homework', () => {
       ['AssignmentExpression'], 
       ['Expression', ',', 'AssignmentExpression'],
     ]],
+    ['Parameters', [
+      ['Identifier'], 
+      ['Parameters', ',', 'Identifier']
+    ]],
+    ['FunctionDeclaration', [
+      ['function', 'Identifier', '(', ')', 'BlockStatement'],
+      ['function', 'Identifier', '(', 'Parameters', ')', 'BlockStatement']
+    ]],
+    ['Declaration', [
+      ['FunctionDeclaration'],
+      ['var', 'Identifier', '=', 'Expression', ';'], 
+      ['let', 'Identifier', '=', 'Expression', ';'], 
+      ['const', 'Identifier', '=', 'Expression', ';']
+    ]],
     ['ExpressionStatement', [
       ['Expression', ';']
     ]],
@@ -184,92 +203,19 @@ describe('Test Homework', () => {
     }
   }
 
-  it('Test EqualityExpression', () => {
-    const str = `
-    '1' == 1 === (1 != '0');
-    `
-    const expression = parse(lex(str), map, initialState)
-    expect(execute(expression[0])).toEqual({
-      "type": "normal",
-      "value": true
-    })
-  })
-
-  it('Test BitwiseExpression', () => {
-    const str = `
-    1 | 2 ^ 2 & 1;
-    `
-    const expression = parse(lex(str), map, initialState)
-    expect(execute(expression[0])).toEqual({
-      "type": "normal",
-      "value": 3
-    })
-  })
-
-  it('Test LogicalExpression', () => {
-    const str = `
-    (0 ?? 2) || 1 && 2
-    `
-    const expression = parse(lex(str), map, initialState)
-    expect(execute(expression[0])).toEqual({
-      "type": "normal",
-      "value": 2
-    })
-  })
-
-  it('Test LogicalExpression with let a = 1 || 2', () => {
-    const str = 'let a  = 1 || 2'
+  it('Test JSObject', () => {
+    const str = `let a = {'b' : 1}`
     const expression = parse(lex(str), map, initialState)
     execute(expression[0])
-    expect(globalEnv.get('a')).toEqual(1)
+    expect(globalEnv.get('a').getProperty('b')).toBe(1)
   })
 
-  it('Test AssignmentOperator', () => {
-    const str = `
-    let ans = 0
-    ans += 1
-    ans *= 2
-    ans /= 2
-    ans <<= 2
-    ans >>= 1
-    ans >>>= 1
-    `
+  it('Test JSFunction', () => {
+    const str = `function a() {
+      const b = 1;
+    }`
     const expression = parse(lex(str), map, initialState)
-    expect(execute(expression[0])).toEqual({
-      "type": "normal",
-      "value": 1
-    })
-  })
-
-  it('Test BreakStatement', () => {
-    const str = `
-    let ans = 0
-    for(let i = 0; i < 10; i++) {
-      if (i === 5) break;
-      ans++
-    }
-    ans + 0;
-    `
-    const expression = parse(lex(str), map, initialState)
-    expect(execute(expression[0])).toEqual({
-      "type": "normal",
-      "value": 5
-    })
-  })
-
-  it('Test ContinueStatement', () => {
-    const str = `
-    let ans = 0
-    for(let i = 0; i < 10; i++) {
-      if (i % 2 === 0) continue;
-      ans++;
-    }
-    ans + 0;
-    `
-    const expression = parse(lex(str), map, initialState)
-    expect(execute(expression[0])).toEqual({
-      "type": "normal",
-      "value": 5
-    })
+    execute(expression[0])
+    expect(globalEnv.get('a').functionBody.type).toBe('BlockStatement')
   })
 })

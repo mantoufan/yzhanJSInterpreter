@@ -1,5 +1,5 @@
 const regStr = `
-(?<NumberLiteral>(?:0[xX][0-9a-fA-F]*|\\.[0-9]+|(?:[1-9]+[0-9]*|0)(?:\\.[0-9]*|\\.)?)(?:[eE][+-]{0,1}[0-9]+)?(?![_$a-zA-Z0-9]))|
+(?<NumbericLiteral>(?:0[xX][0-9a-fA-F]*|\\.[0-9]+|(?:[1-9]+[0-9]*|0)(?:\\.[0-9]*|\\.)?)(?:[eE][+-]{0,1}[0-9]+)?(?![_$a-zA-Z0-9]))|
 (?<NulLiteral>null(?![_$a-zA-Z0-9]))|
 (?<BooleanLiteral>(?:true|false)(?![_$a-zA-Z0-9]))|
 (?<StringLiteral>"(?:[^"\\n\\\\\\r\\u2028\\u2029]|\\\\(?:['"\\\\bfnrtv\\n\\r\\u2028\\u2029]|\\r\\n)|\\\\x[0-9a-fA-F]{2}|\\\\u[0-9a-fA-F]{4}|\\\\[^0-9ux'"\\\\bfnrtv\\n\\\\\\r\\u2028\\u2029])*"|'(?:[^'\\n\\\\\\r\\u2028\\u2029]|\\\\(?:['"\\\\bfnrtv\\n\\r\\u2028\\u2029]|\\r\\n)|\\\\x[0-9a-fA-F]{2}|\\\\u[0-9a-fA-F]{4}|\\\\[^0-9ux'"\\\\bfnrtv\\n\\\\\\r\\u2028\\u2029])*')|
@@ -10,43 +10,47 @@ const regStr = `
 `
 
 const rulesMap = new Map([
-  ['Parameters', [
-    ['Identifier'], 
-    ['Parameters', ',', 'Identifier']
+  ['PropertyDefinition', [
+    ['StringLiteral', ':', 'Expression'],
+    ['NumbericLiteral', ':', 'Expression']
   ]],
-  ['FunctionDeclaration', [
-    ['function', 'Identifier', '(', ')', '{', 'StatementList', '}'],
-    ['function', 'Identifier', '(', 'Parameters', ')', '{', 'StatementList', '}']
+  ['PropertyDefinitionList', [
+    ['PropertyDefinition'],
+    ['PropertyDefinitionList', ':', 'PropertyDefinition']
   ]],
-  ['Declaration', [
-    ['FunctionDeclaration'],
-    ['var', 'Identifier', '=', 'Expression', ';'], 
-    ['let', 'Identifier', '=', 'Expression', ';'], 
-    ['const', 'Identifier', '=', 'Expression', ';']
+  ['ObjectLiteral', [
+    ['{', '}'],
+    ['{', 'PropertyDefinitionList', '}'],
+    ['{', 'PropertyDefinitionList', ',', '}'],
   ]],
   ['Literal', [
-    ['NumberLiteral'], 
+    ['NumbericLiteral'], 
     ['StringLiteral'], 
     ['BooleanLiteral'], 
-    ['NullLiteral']
+    ['NullLiteral'],
+    ['ObjectLiteral'],
   ]],
   ['Primary', [
     ['(', 'Expression', ')'], 
     ['Literal'], 
     ['Identifier']
   ]],
+  ['Arguments', [
+    ['AssignmentExpression'],
+    ['Arguments', ',', 'AssignmentExpression']
+  ]],
   ['MemberExpression', [
     ['Primary'], 
     ['MemberExpression', '.', 'Identifier'], 
-    ['MemberExpression', '[', 'Expression', ']']
+    ['MemberExpression', '[', 'Expression', ']'],
+    ['new', 'MemberExpression', '(', 'Arguments', ')'],
+    ['MemberExpression', '(', ')'],
   ]],
   ['NewExpression', [
     ['MemberExpression'], 
     ['new', 'NewExpression']
   ]],
   ['CallExpression', [
-    ['new', 'MemberExpression', '(', ')'],
-    ['MemberExpression', '(', ')'],
     ['CallExpression', '.', 'Identifier'],
     ['CallExpression', '[', 'Expression', ']'],
     ['CallExpression', '(', 'Arguments', ')']
@@ -137,6 +141,20 @@ const rulesMap = new Map([
   ['Expression', [
     ['AssignmentExpression'], 
     ['Expression', ',', 'AssignmentExpression'],
+  ]],
+  ['Parameters', [
+    ['Identifier'], 
+    ['Parameters', ',', 'Identifier']
+  ]],
+  ['FunctionDeclaration', [
+    ['function', 'Identifier', '(', ')', 'BlockStatement'],
+    ['function', 'Identifier', '(', 'Parameters', ')', 'BlockStatement']
+  ]],
+  ['Declaration', [
+    ['FunctionDeclaration'],
+    ['var', 'Identifier', '=', 'Expression', ';'], 
+    ['let', 'Identifier', '=', 'Expression', ';'], 
+    ['const', 'Identifier', '=', 'Expression', ';']
   ]],
   ['ExpressionStatement', [
     ['Expression', ';']

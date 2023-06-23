@@ -3,7 +3,7 @@ const { lex, parse } = require('../../src/index')
 describe('Test Expression Parser', () => {
   it('literal', () => {
     const map = new Map([
-      ['Literal', [['NumberLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]]
+      ['Literal', [['NumbericLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]]
     ])
     const initialState = {
       Literal: {
@@ -18,7 +18,7 @@ describe('Test Expression Parser', () => {
 
   it('Primary', () => {
     const map = new Map([
-      ['Literal', [['NumberLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
+      ['Literal', [['NumbericLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
       ['Primary', [['(', 'Expression', ')'], ['Literal'], ['Identifier']]]
     ])
     const initialState = {
@@ -33,7 +33,7 @@ describe('Test Expression Parser', () => {
   })
   it('MemberExpression', () => {
     const map = new Map([
-      ['Literal', [['NumberLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
+      ['Literal', [['NumbericLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
       ['Primary', [['(', 'Expression', ')'], ['Literal'], ['Identifier']]],
       ['MemberExpression', [['Primary'], ['MemberExpression', '.', 'Identifier'], ['MemberExpression', '[', 'Expression', ']']]],
     ])
@@ -49,7 +49,7 @@ describe('Test Expression Parser', () => {
   })
   it('AdditiveExpression', () => {
     const map = new Map([
-      ['Literal', [['NumberLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
+      ['Literal', [['NumbericLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
       ['Primary', [['(', 'Expression', ')'], ['Literal'], ['Identifier']]],
       ['MemberExpression', [['Primary'], ['MemberExpression', '.', 'Identifier'], ['MemberExpression', '[', 'Expression', ']']]],
       ['MultiplicativeExpression', [['MemberExpression'], ['MultiplicativeExpression', '*', 'MemberExpression'], ['MultiplicativeExpression', '/', 'MemberExpression'], ['MultiplicativeExpression', '%', 'MemberExpression']]],
@@ -63,11 +63,11 @@ describe('Test Expression Parser', () => {
       }
     }
     const expression = parse(lex("a.b + 2 * 3"), map, initialState)
-    expect(JSON.stringify(expression)).toBe(JSON.stringify([{"type":"AdditiveExpression","children":[{"type":"AdditiveExpression","children":[{"type":"MultiplicativeExpression","children":[{"type":"MemberExpression","children":[{"type":"MemberExpression","children":[{"type":"Primary","children":[{"type":"Identifier","value":"a"}]}]},{"type":".","value":"."},{"type":"Identifier","value":"b"}]}]}]},{"type":"+","value":"+"},{"type":"MultiplicativeExpression","children":[{"type":"MultiplicativeExpression","children":[{"type":"MemberExpression","children":[{"type":"Primary","children":[{"type":"Literal","children":[{"type":"NumberLiteral","value":"2"}]}]}]}]},{"type":"*","value":"*"},{"type":"MemberExpression","children":[{"type":"Primary","children":[{"type":"Literal","children":[{"type":"NumberLiteral","value":"3"}]}]}]}]}]},{"type":"EOF"}]))
+    expect(JSON.stringify(expression)).toBe(JSON.stringify([{"type":"AdditiveExpression","children":[{"type":"AdditiveExpression","children":[{"type":"MultiplicativeExpression","children":[{"type":"MemberExpression","children":[{"type":"MemberExpression","children":[{"type":"Primary","children":[{"type":"Identifier","value":"a"}]}]},{"type":".","value":"."},{"type":"Identifier","value":"b"}]}]}]},{"type":"+","value":"+"},{"type":"MultiplicativeExpression","children":[{"type":"MultiplicativeExpression","children":[{"type":"MemberExpression","children":[{"type":"Primary","children":[{"type":"Literal","children":[{"type":"NumbericLiteral","value":"2"}]}]}]}]},{"type":"*","value":"*"},{"type":"MemberExpression","children":[{"type":"Primary","children":[{"type":"Literal","children":[{"type":"NumbericLiteral","value":"3"}]}]}]}]}]},{"type":"EOF"}]))
   })
   it('AssignmentExpression', () => {
     const map = new Map([
-      ['Literal', [['NumberLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
+      ['Literal', [['NumbericLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
       ['Primary', [['(', 'Expression', ')'], ['Literal'], ['Identifier']]],
       ['MemberExpression', [['Primary'], ['MemberExpression', '.', 'Identifier'], ['MemberExpression', '[', 'Expression', ']']]],
       ['LeftHandSideExpression', [['MemberExpression']]],
@@ -83,11 +83,11 @@ describe('Test Expression Parser', () => {
       }
     }
     const expression = parse(lex("a = 20"), map, initialState)
-    expect(JSON.stringify(expression)).toBe(JSON.stringify([{"type":"AssignmentExpression","children":[{"type":"LeftHandSideExpression","children":[{"type":"MemberExpression","children":[{"type":"Primary","children":[{"type":"Identifier","value":"a"}]}]}]},{"type":"=","value":"="},{"type":"AssignmentExpression","children":[{"type":"AdditiveExpression","children":[{"type":"MultiplicativeExpression","children":[{"type":"LeftHandSideExpression","children":[{"type":"MemberExpression","children":[{"type":"Primary","children":[{"type":"Literal","children":[{"type":"NumberLiteral","value":"20"}]}]}]}]}]}]}]}]},{"type":"EOF"}]))
+    expect(JSON.stringify(expression)).toBe(JSON.stringify([{"type":"AssignmentExpression","children":[{"type":"LeftHandSideExpression","children":[{"type":"MemberExpression","children":[{"type":"Primary","children":[{"type":"Identifier","value":"a"}]}]}]},{"type":"=","value":"="},{"type":"AssignmentExpression","children":[{"type":"AdditiveExpression","children":[{"type":"MultiplicativeExpression","children":[{"type":"LeftHandSideExpression","children":[{"type":"MemberExpression","children":[{"type":"Primary","children":[{"type":"Literal","children":[{"type":"NumbericLiteral","value":"20"}]}]}]}]}]}]}]}]},{"type":"EOF"}]))
   })
   it('Statement', () => {
     const map = new Map([
-      ['Literal', [['NumberLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
+      ['Literal', [['NumbericLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
       ['Primary', [['(', 'Expression', ')'], ['Literal'], ['Identifier']]],
       ['MemberExpression', [['Primary'], ['MemberExpression', '.', 'Identifier'], ['MemberExpression', '[', 'Expression', ']']]],
       ['LeftHandSideExpression', [['MemberExpression']]],
@@ -118,11 +118,11 @@ describe('Test Expression Parser', () => {
       }
     }
     const expression = parse(lex("let a = 1;"), map, initialState)
-    expect(JSON.stringify(expression)).toBe(JSON.stringify([{"type":"Statement","children":[{"type":"Declaration","children":[{"type":"let","value":"let"},{"type":"Identifier","value":"a"},{"type":"=","value":"="},{"type":"Expression","children":[{"type":"AssignmentExpression","children":[{"type":"AdditiveExpression","children":[{"type":"MultiplicativeExpression","children":[{"type":"LeftHandSideExpression","children":[{"type":"MemberExpression","children":[{"type":"Primary","children":[{"type":"Literal","children":[{"type":"NumberLiteral","value":"1"}]}]}]}]}]}]}]}]},{"type":";","value":";"}]}]},{"type":"EOF"}]))
+    expect(JSON.stringify(expression)).toBe(JSON.stringify([{"type":"Statement","children":[{"type":"Declaration","children":[{"type":"let","value":"let"},{"type":"Identifier","value":"a"},{"type":"=","value":"="},{"type":"Expression","children":[{"type":"AssignmentExpression","children":[{"type":"AdditiveExpression","children":[{"type":"MultiplicativeExpression","children":[{"type":"LeftHandSideExpression","children":[{"type":"MemberExpression","children":[{"type":"Primary","children":[{"type":"Literal","children":[{"type":"NumbericLiteral","value":"1"}]}]}]}]}]}]}]}]},{"type":";","value":";"}]}]},{"type":"EOF"}]))
   })
   it('Test StatementList', () => {
     const map = new Map([
-      ['Literal', [['NumberLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
+      ['Literal', [['NumbericLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
       ['Primary', [['(', 'Expression', ')'], ['Literal'], ['Identifier']]],
       ['MemberExpression', [['Primary'], ['MemberExpression', '.', 'Identifier'], ['MemberExpression', '[', 'Expression', ']']]],
       ['LeftHandSideExpression', [['MemberExpression']]],
@@ -151,12 +151,12 @@ describe('Test Expression Parser', () => {
     let a = 1;
     const b = 1;
     `), map, initialState)
-    expect(JSON.stringify(expression)).toBe(JSON.stringify([{"type":"StatementList","children":[{"type":"StatementList","children":[{"type":"StatementListItem","children":[{"type":"Statement","children":[{"type":"Declaration","children":[{"type":"let","value":"let"},{"type":"Identifier","value":"a"},{"type":"=","value":"="},{"type":"Expression","children":[{"type":"AssignmentExpression","children":[{"type":"AdditiveExpression","children":[{"type":"MultiplicativeExpression","children":[{"type":"LeftHandSideExpression","children":[{"type":"MemberExpression","children":[{"type":"Primary","children":[{"type":"Literal","children":[{"type":"NumberLiteral","value":"1"}]}]}]}]}]}]}]}]},{"type":";","value":";"}]}]}]}]},{"type":"StatementListItem","children":[{"type":"Statement","children":[{"type":"Declaration","children":[{"type":"const","value":"const"},{"type":"Identifier","value":"b"},{"type":"=","value":"="},{"type":"Expression","children":[{"type":"AssignmentExpression","children":[{"type":"AdditiveExpression","children":[{"type":"MultiplicativeExpression","children":[{"type":"LeftHandSideExpression","children":[{"type":"MemberExpression","children":[{"type":"Primary","children":[{"type":"Literal","children":[{"type":"NumberLiteral","value":"1"}]}]}]}]}]}]}]}]},{"type":";","value":";"}]}]}]}]},{"type":"EOF"}]))
+    expect(JSON.stringify(expression)).toBe(JSON.stringify([{"type":"StatementList","children":[{"type":"StatementList","children":[{"type":"StatementListItem","children":[{"type":"Statement","children":[{"type":"Declaration","children":[{"type":"let","value":"let"},{"type":"Identifier","value":"a"},{"type":"=","value":"="},{"type":"Expression","children":[{"type":"AssignmentExpression","children":[{"type":"AdditiveExpression","children":[{"type":"MultiplicativeExpression","children":[{"type":"LeftHandSideExpression","children":[{"type":"MemberExpression","children":[{"type":"Primary","children":[{"type":"Literal","children":[{"type":"NumbericLiteral","value":"1"}]}]}]}]}]}]}]}]},{"type":";","value":";"}]}]}]}]},{"type":"StatementListItem","children":[{"type":"Statement","children":[{"type":"Declaration","children":[{"type":"const","value":"const"},{"type":"Identifier","value":"b"},{"type":"=","value":"="},{"type":"Expression","children":[{"type":"AssignmentExpression","children":[{"type":"AdditiveExpression","children":[{"type":"MultiplicativeExpression","children":[{"type":"LeftHandSideExpression","children":[{"type":"MemberExpression","children":[{"type":"Primary","children":[{"type":"Literal","children":[{"type":"NumbericLiteral","value":"1"}]}]}]}]}]}]}]}]},{"type":";","value":";"}]}]}]}]},{"type":"EOF"}]))
   })
 
   it('ASI followed EOF and }', () => {
     const map = new Map([
-      ['Literal', [['NumberLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
+      ['Literal', [['NumbericLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
       ['Primary', [['(', 'Expression', ')'], ['Literal'], ['Identifier']]],
       ['MemberExpression', [['Primary'], ['MemberExpression', '.', 'Identifier'], ['MemberExpression', '[', 'Expression', ']']]],
       ['LeftHandSideExpression', [['MemberExpression']]],
@@ -182,12 +182,12 @@ describe('Test Expression Parser', () => {
       }
     }
     const expression = parse(lex('let a = 1 + 2 + 3'), map, initialState)
-    expect(JSON.stringify(expression)).toBe(JSON.stringify([{"type":"StatementList","children":[{"type":"StatementListItem","children":[{"type":"Statement","children":[{"type":"Declaration","children":[{"type":"let","value":"let"},{"type":"Identifier","value":"a"},{"type":"=","value":"="},{"type":"Expression","children":[{"type":"AssignmentExpression","children":[{"type":"AdditiveExpression","children":[{"type":"AdditiveExpression","children":[{"type":"AdditiveExpression","children":[{"type":"MultiplicativeExpression","children":[{"type":"LeftHandSideExpression","children":[{"type":"MemberExpression","children":[{"type":"Primary","children":[{"type":"Literal","children":[{"type":"NumberLiteral","value":"1"}]}]}]}]}]}]},{"type":"+","value":"+"},{"type":"MultiplicativeExpression","children":[{"type":"LeftHandSideExpression","children":[{"type":"MemberExpression","children":[{"type":"Primary","children":[{"type":"Literal","children":[{"type":"NumberLiteral","value":"2"}]}]}]}]}]}]},{"type":"+","value":"+"},{"type":"MultiplicativeExpression","children":[{"type":"LeftHandSideExpression","children":[{"type":"MemberExpression","children":[{"type":"Primary","children":[{"type":"Literal","children":[{"type":"NumberLiteral","value":"3"}]}]}]}]}]}]}]}]},{"type":";","value":";"}]}]}]}]},{"type":"EOF"}]))
+    expect(JSON.stringify(expression)).toBe(JSON.stringify([{"type":"StatementList","children":[{"type":"StatementListItem","children":[{"type":"Statement","children":[{"type":"Declaration","children":[{"type":"let","value":"let"},{"type":"Identifier","value":"a"},{"type":"=","value":"="},{"type":"Expression","children":[{"type":"AssignmentExpression","children":[{"type":"AdditiveExpression","children":[{"type":"AdditiveExpression","children":[{"type":"AdditiveExpression","children":[{"type":"MultiplicativeExpression","children":[{"type":"LeftHandSideExpression","children":[{"type":"MemberExpression","children":[{"type":"Primary","children":[{"type":"Literal","children":[{"type":"NumbericLiteral","value":"1"}]}]}]}]}]}]},{"type":"+","value":"+"},{"type":"MultiplicativeExpression","children":[{"type":"LeftHandSideExpression","children":[{"type":"MemberExpression","children":[{"type":"Primary","children":[{"type":"Literal","children":[{"type":"NumbericLiteral","value":"2"}]}]}]}]}]}]},{"type":"+","value":"+"},{"type":"MultiplicativeExpression","children":[{"type":"LeftHandSideExpression","children":[{"type":"MemberExpression","children":[{"type":"Primary","children":[{"type":"Literal","children":[{"type":"NumbericLiteral","value":"3"}]}]}]}]}]}]}]}]},{"type":";","value":";"}]}]}]}]},{"type":"EOF"}]))
   })
 
   it('ASI followed Enter', () => {
     const map = new Map([
-      ['Literal', [['NumberLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
+      ['Literal', [['NumbericLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
       ['Primary', [['(', 'Expression', ')'], ['Literal'], ['Identifier']]],
       ['MemberExpression', [['Primary'], ['MemberExpression', '.', 'Identifier'], ['MemberExpression', '[', 'Expression', ']']]],
       ['LeftHandSideExpression', [['MemberExpression']]],
@@ -213,12 +213,12 @@ describe('Test Expression Parser', () => {
       }
     }
     const expression = parse(lex("let a = 1 + 2 + 3\nlet b = 1"), map, initialState)
-    expect(JSON.stringify(expression)).toBe(JSON.stringify([{"type":"StatementList","children":[{"type":"StatementList","children":[{"type":"StatementListItem","children":[{"type":"Statement","children":[{"type":"Declaration","children":[{"type":"let","value":"let"},{"type":"Identifier","value":"a"},{"type":"=","value":"="},{"type":"Expression","children":[{"type":"AssignmentExpression","children":[{"type":"AdditiveExpression","children":[{"type":"AdditiveExpression","children":[{"type":"AdditiveExpression","children":[{"type":"MultiplicativeExpression","children":[{"type":"LeftHandSideExpression","children":[{"type":"MemberExpression","children":[{"type":"Primary","children":[{"type":"Literal","children":[{"type":"NumberLiteral","value":"1"}]}]}]}]}]}]},{"type":"+","value":"+"},{"type":"MultiplicativeExpression","children":[{"type":"LeftHandSideExpression","children":[{"type":"MemberExpression","children":[{"type":"Primary","children":[{"type":"Literal","children":[{"type":"NumberLiteral","value":"2"}]}]}]}]}]}]},{"type":"+","value":"+"},{"type":"MultiplicativeExpression","children":[{"type":"LeftHandSideExpression","children":[{"type":"MemberExpression","children":[{"type":"Primary","children":[{"type":"Literal","children":[{"type":"NumberLiteral","value":"3"}]}]}]}]}]}]}]}]},{"type":";","value":";"}]}]}]}]},{"type":"StatementListItem","children":[{"type":"Statement","children":[{"type":"Declaration","children":[{"type":"let","value":"let"},{"type":"Identifier","value":"b"},{"type":"=","value":"="},{"type":"Expression","children":[{"type":"AssignmentExpression","children":[{"type":"AdditiveExpression","children":[{"type":"MultiplicativeExpression","children":[{"type":"LeftHandSideExpression","children":[{"type":"MemberExpression","children":[{"type":"Primary","children":[{"type":"Literal","children":[{"type":"NumberLiteral","value":"1"}]}]}]}]}]}]}]}]},{"type":";","value":";"}]}]}]}]},{"type":"EOF"}]))
+    expect(JSON.stringify(expression)).toBe(JSON.stringify([{"type":"StatementList","children":[{"type":"StatementList","children":[{"type":"StatementListItem","children":[{"type":"Statement","children":[{"type":"Declaration","children":[{"type":"let","value":"let"},{"type":"Identifier","value":"a"},{"type":"=","value":"="},{"type":"Expression","children":[{"type":"AssignmentExpression","children":[{"type":"AdditiveExpression","children":[{"type":"AdditiveExpression","children":[{"type":"AdditiveExpression","children":[{"type":"MultiplicativeExpression","children":[{"type":"LeftHandSideExpression","children":[{"type":"MemberExpression","children":[{"type":"Primary","children":[{"type":"Literal","children":[{"type":"NumbericLiteral","value":"1"}]}]}]}]}]}]},{"type":"+","value":"+"},{"type":"MultiplicativeExpression","children":[{"type":"LeftHandSideExpression","children":[{"type":"MemberExpression","children":[{"type":"Primary","children":[{"type":"Literal","children":[{"type":"NumbericLiteral","value":"2"}]}]}]}]}]}]},{"type":"+","value":"+"},{"type":"MultiplicativeExpression","children":[{"type":"LeftHandSideExpression","children":[{"type":"MemberExpression","children":[{"type":"Primary","children":[{"type":"Literal","children":[{"type":"NumbericLiteral","value":"3"}]}]}]}]}]}]}]}]},{"type":";","value":";"}]}]}]}]},{"type":"StatementListItem","children":[{"type":"Statement","children":[{"type":"Declaration","children":[{"type":"let","value":"let"},{"type":"Identifier","value":"b"},{"type":"=","value":"="},{"type":"Expression","children":[{"type":"AssignmentExpression","children":[{"type":"AdditiveExpression","children":[{"type":"MultiplicativeExpression","children":[{"type":"LeftHandSideExpression","children":[{"type":"MemberExpression","children":[{"type":"Primary","children":[{"type":"Literal","children":[{"type":"NumbericLiteral","value":"1"}]}]}]}]}]}]}]}]},{"type":";","value":";"}]}]}]}]},{"type":"EOF"}]))
   })
 
   it('New Expression / Call Expression', () => {
     const map = new Map([
-      ['Literal', [['NumberLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
+      ['Literal', [['NumbericLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
       ['Primary', [['(', 'Expression', ')'], ['Literal'], ['Identifier']]],
       ['MemberExpression', [['Primary'], ['MemberExpression', '.', 'Identifier'], ['MemberExpression', '[', 'Expression', ']']]],
       ['NewExpression', [['MemberExpression'], ['new', 'NewExpression']]],
@@ -256,7 +256,7 @@ describe('Test Expression Parser', () => {
   })
   it('Function Declaration', () => {
     const map = new Map([
-      ['Literal', [['NumberLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
+      ['Literal', [['NumbericLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
       ['Primary', [['(', 'Expression', ')'], ['Literal'], ['Identifier']]],
       ['MemberExpression', [['Primary'], ['MemberExpression', '.', 'Identifier'], ['MemberExpression', '[', 'Expression', ']']]],
       ['NewExpression', [['MemberExpression'], ['new', 'NewExpression']]],

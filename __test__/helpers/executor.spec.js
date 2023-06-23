@@ -1,7 +1,7 @@
 const { lex, parse, execute, globalEnv } = require('../../src/index')
 describe('Test Executor', () => {
   const map = new Map([
-    ['Literal', [['NumberLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
+    ['Literal', [['NumbericLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
     ['Primary', [['(', 'Expression', ')'], ['Literal'], ['Identifier']]],
     ['MemberExpression', [['Primary'], ['MemberExpression', '.', 'Identifier'], ['MemberExpression', '[', 'Expression', ']']]],
     ['NewExpression', [['MemberExpression'], ['new', 'NewExpression']]],
@@ -51,7 +51,7 @@ describe('Test Executor', () => {
 
 describe('Test Scope', () => {
   const map = new Map([
-    ['Literal', [['NumberLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
+    ['Literal', [['NumbericLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
     ['Primary', [['(', 'Expression', ')'], ['Literal'], ['Identifier']]],
     ['MemberExpression', [['Primary'], ['MemberExpression', '.', 'Identifier'], ['MemberExpression', '[', 'Expression', ']']]],
     ['NewExpression', [['MemberExpression'], ['new', 'NewExpression']]],
@@ -131,7 +131,7 @@ describe('Test Scope', () => {
 describe('Test Statement Parser', () => {
   describe('Test IfStatement', () => {
     const map = new Map([
-      ['Literal', [['NumberLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
+      ['Literal', [['NumbericLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
       ['Primary', [['(', 'Expression', ')'], ['Literal'], ['Identifier']]],
       ['MemberExpression', [['Primary'], ['MemberExpression', '.', 'Identifier'], ['MemberExpression', '[', 'Expression', ']']]],
       ['NewExpression', [['MemberExpression'], ['new', 'NewExpression']]],
@@ -189,7 +189,7 @@ describe('Test Statement Parser', () => {
   
   describe('Test ForStatement', () => {
     const map = new Map([
-      ['Literal', [['NumberLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
+      ['Literal', [['NumbericLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
       ['Primary', [['(', 'Expression', ')'], ['Literal'], ['Identifier']]],
       ['MemberExpression', [['Primary'], ['MemberExpression', '.', 'Identifier'], ['MemberExpression', '[', 'Expression', ']']]],
       ['NewExpression', [['MemberExpression'], ['new', 'NewExpression']]],
@@ -268,7 +268,7 @@ describe('Test Statement Parser', () => {
   
   describe('Test BreakStatement', () => {
     const map = new Map([
-      ['Literal', [['NumberLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
+      ['Literal', [['NumbericLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
       ['Primary', [['(', 'Expression', ')'], ['Literal'], ['Identifier']]],
       ['MemberExpression', [['Primary'], ['MemberExpression', '.', 'Identifier'], ['MemberExpression', '[', 'Expression', ']']]],
       ['NewExpression', [['MemberExpression'], ['new', 'NewExpression']]],
@@ -348,7 +348,7 @@ describe('Test Statement Parser', () => {
 
   describe('Test BreakStatement', () => {
     const map = new Map([
-      ['Literal', [['NumberLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
+      ['Literal', [['NumbericLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral']]],
       ['Primary', [['(', 'Expression', ')'], ['Literal'], ['Identifier']]],
       ['MemberExpression', [['Primary'], ['MemberExpression', '.', 'Identifier'], ['MemberExpression', '[', 'Expression', ']']]],
       ['NewExpression', [['MemberExpression'], ['new', 'NewExpression']]],
