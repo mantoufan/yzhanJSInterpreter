@@ -112,7 +112,11 @@ const executor = {
     }
   },
   CallExpression(node) {
-    // todo
+    if (node.children.length === 3) {
+      const ref = execute(node.children[0])
+      const jsFunction = ref.get()
+      return jsFunction.call(this.currentEnv)
+    }
   },
   LeftHandSideExpression(node) {
     return execute(node.children[0])
@@ -368,8 +372,8 @@ const executor = {
     execute(initialExpression)
     while (execute(conditionalExpression)) {
       const completion = execute(cycleBody)
-      if (completion.type === 'break') {
-        return new Completion('normal')
+      if (completion.type === 'break' || completion.type === 'return') {
+        return new Completion('normal', completion.value)
       }
       execute(finalExpression)
     }
@@ -384,6 +388,14 @@ const executor = {
   },
   ContinueStatement(node) {
     return new Completion('continue')
+  },
+  ReturnStatement(node) {
+    if (node.children.length === 2) {
+      return new Completion('return')
+    } else if (node.children.length === 3) {
+      const value = execute(node.children[1])
+      return new Completion('return', value)
+    }
   },
   Statement(node) {
     return execute(node.children[0])

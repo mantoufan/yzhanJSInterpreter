@@ -8,10 +8,10 @@ module.exports = class extends JSObject {
     this.parameters = parameters
   }
 
-  call(thisArg, ...args) {
-    const { executor, functionBody } = this
-    executor.envStack.push(thisArg.env)
-    const res = that.executor[functionBody.type](functionBody)
+  call(env, ...args) {
+    const { executor, functionBody, parameters } = this
+    executor.envStack.push(env)
+    const res = this.executor[functionBody.type](functionBody)
     executor.envStack.pop()
     return res
   }

@@ -43,14 +43,15 @@ const rulesMap = new Map([
     ['Primary'], 
     ['MemberExpression', '.', 'Identifier'], 
     ['MemberExpression', '[', 'Expression', ']'],
-    ['new', 'MemberExpression', '(', 'Arguments', ')'],
-    ['MemberExpression', '(', ')'],
+    ['new', 'MemberExpression', '(', 'Arguments', ')']
   ]],
   ['NewExpression', [
     ['MemberExpression'], 
     ['new', 'NewExpression']
   ]],
   ['CallExpression', [
+    ['MemberExpression', '(', ')'],
+    ['MemberExpression', '(', 'Arguments', ')'],
     ['CallExpression', '.', 'Identifier'],
     ['CallExpression', '[', 'Expression', ']'],
     ['CallExpression', '(', 'Arguments', ')']
@@ -183,6 +184,10 @@ const rulesMap = new Map([
     ['continue', ';'],
     ['continue', 'Identifier', ';']
   ]],
+  ['ReturnStatement', [
+    ['return', ';'],
+    ['return', 'Expression', ';'],
+  ]],
   ['Statement', [
     ['BlockStatement'],
     ['ExpressionStatement'], 
@@ -191,6 +196,7 @@ const rulesMap = new Map([
     ['BreakableStatement'],
     ['BreakStatement'],
     ['ContinueStatement'],
+    ['ReturnStatement'],
     ['Declaration'], 
   ]],
   ['StatementListItem', [
