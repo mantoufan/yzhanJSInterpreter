@@ -3,8 +3,8 @@
 ![npm bundle size](https://img.shields.io/bundlephobia/minzip/yzhanjsinterpreter)
 ![npm](https://img.shields.io/npm/dt/yzhanjsinterpreter)
 [![GitHub license](https://img.shields.io/github/license/mantoufan/yzhanjsinterpreter)](https://github.com/mantoufan/yzhanjsinterpreter/blob/main/LICENSE)  
-A JavaScript Interpreter Using JS itself  
-JavaScript 解释器，包含词法分析、语法解析和执行
+A JavaScript Interpreter Using JS itself, implement `eval`  
+JavaScript 解释器，包含词法分析、语法解析和执行。实现 `eval`
 ## Demo
 You could change JavaScript Code and view the result in realtime.  
 [Online Demo](https://mantoufan.github.io/yzhanJSInterpreter)  
@@ -32,17 +32,24 @@ for (let i = 0; i < 10; i++) {
 }
 undefined && 1 ?? (0 || a + b);`
 ```
-### Lexical Analyzer
+### Eval · Evaluate
+`eval` is a reserved keyword, so use `evaluate` instead
+```javascript 
+const evalResult = yzhanJSInterpreter.evaluate(code)
+```
+`evaluate` runs followed 3 steps:
+#### 1. Lexical Analyzer
 ```javascript
 const lexResult = yzhanJSInterpreter.lex(code)
 ```
-### Syntax Parser
+#### 2. Syntax Parser
 ```javascript
 const parseResults = yzhanJSInterpreter.parse(lexResult)
 ```
-### Executor
+#### 3. Executor
 ```javascript
 const executeResult = yzhanJSInterpreter.execute(parseResults[0])
+const evalResult = executeResult
 ```
 ## Development
 ### Unit Testing

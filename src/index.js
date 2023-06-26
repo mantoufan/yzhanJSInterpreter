@@ -1,13 +1,13 @@
 const lex = require('./helpers/lexical-analyzer')
 const parse = require('./helpers/syntax-parser')
-const { execute, globalEnv } = require('./helpers/executor')
+const { executor, globalEnv } = require('./helpers/executor')
 
-exports.lex = lex
-exports.parse = parse
-exports.execute = execute
-exports.globalEnv = globalEnv
-exports.default = {
+module.exports = {
   lex,
   parse,
-  execute
+  executor,
+  globalEnv,
+  evaluate(code, map, initialState) {
+    return executor.execute(parse(lex(code), map, initialState)[0])
+  }
 }

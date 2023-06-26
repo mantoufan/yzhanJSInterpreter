@@ -1,4 +1,4 @@
-const { lex, parse, execute, globalEnv } = require('../../src/index')
+const { evaluate, globalEnv } = require('../../../src/index')
 describe('Test Homework', () => {
   const map = new Map([
     ['Parameters', [
@@ -185,47 +185,33 @@ describe('Test Homework', () => {
   }
 
   it('Test EqualityExpression', () => {
-    const str = `
-    '1' == 1 === (1 != '0');
-    `
-    const expression = parse(lex(str), map, initialState)
-    expect(execute(expression[0])).toEqual({
-      "type": "normal",
-      "value": true
+    expect(evaluate(`'1' == 1 === (1 != '0');`, map, initialState)).toEqual({
+      type: 'normal',
+      value: true
     })
   })
 
   it('Test BitwiseExpression', () => {
-    const str = `
-    1 | 2 ^ 2 & 1;
-    `
-    const expression = parse(lex(str), map, initialState)
-    expect(execute(expression[0])).toEqual({
-      "type": "normal",
-      "value": 3
+    expect(evaluate(`1 | 2 ^ 2 & 1;`, map, initialState)).toEqual({
+      type: 'normal',
+      value: 3
     })
   })
 
   it('Test LogicalExpression', () => {
-    const str = `
-    (0 ?? 2) || 1 && 2
-    `
-    const expression = parse(lex(str), map, initialState)
-    expect(execute(expression[0])).toEqual({
-      "type": "normal",
-      "value": 2
+    expect(evaluate(`(0 ?? 2) || 1 && 2`, map, initialState)).toEqual({
+      type: 'normal',
+      value: 2
     })
   })
 
   it('Test LogicalExpression with let a = 1 || 2', () => {
-    const str = 'let a  = 1 || 2'
-    const expression = parse(lex(str), map, initialState)
-    execute(expression[0])
+    evaluate('let a  = 1 || 2', map, initialState)
     expect(globalEnv.get('a')).toEqual(1)
   })
 
   it('Test AssignmentOperator', () => {
-    const str = `
+    expect(evaluate(`
     let ans = 0
     ans += 1
     ans *= 2
@@ -233,43 +219,37 @@ describe('Test Homework', () => {
     ans <<= 2
     ans >>= 1
     ans >>>= 1
-    `
-    const expression = parse(lex(str), map, initialState)
-    expect(execute(expression[0])).toEqual({
-      "type": "normal",
-      "value": 1
+    `, map, initialState)).toEqual({
+      type: 'normal',
+      value: 1
     })
   })
 
   it('Test BreakStatement', () => {
-    const str = `
+    expect(evaluate(`
     let ans = 0
     for(let i = 0; i < 10; i++) {
       if (i === 5) break;
       ans++
     }
     ans + 0;
-    `
-    const expression = parse(lex(str), map, initialState)
-    expect(execute(expression[0])).toEqual({
-      "type": "normal",
-      "value": 5
+    `, map, initialState)).toEqual({
+      type: 'normal',
+      value: 5
     })
   })
 
   it('Test ContinueStatement', () => {
-    const str = `
+    expect(evaluate(`
     let ans = 0
     for(let i = 0; i < 10; i++) {
       if (i % 2 === 0) continue;
       ans++;
     }
     ans + 0;
-    `
-    const expression = parse(lex(str), map, initialState)
-    expect(execute(expression[0])).toEqual({
-      "type": "normal",
-      "value": 5
+    `)).toEqual({
+      type: 'normal',
+      value: 5
     })
   })
 })

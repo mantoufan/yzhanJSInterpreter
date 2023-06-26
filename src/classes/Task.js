@@ -4,6 +4,6 @@ module.exports = class {
     this.func = func
   }
   run() {
-    this.func.call(this.args)
+    this.func.call(null, this.args)
   }
 }

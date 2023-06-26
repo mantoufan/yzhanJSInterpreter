@@ -1,5 +1,5 @@
 
-const { lex, parse, execute, globalEnv } = require('../../src/index')
+const { globalEnv, evaluate } = require('../../../src/index')
 describe('Test Object And Function', () => {
   const map = new Map([
     ['PropertyDefinition', [
@@ -204,18 +204,14 @@ describe('Test Object And Function', () => {
   }
 
   it('Test JSObject', () => {
-    const str = `let a = {'b' : 1}`
-    const expression = parse(lex(str), map, initialState)
-    execute(expression[0])
+    evaluate(`let a = {'b' : 1}`, map, initialState)
     expect(globalEnv.get('a').getProperty('b')).toBe(1)
   })
 
   it('Test JSFunction', () => {
-    const str = `function a() {
+    evaluate(`function a() {
       const b = 1;
-    }`
-    const expression = parse(lex(str), map, initialState)
-    execute(expression[0])
+    }`, map, initialState)
     expect(globalEnv.get('a').functionBody.type).toBe('BlockStatement')
   })
 })
@@ -249,25 +245,32 @@ describe('Test Return Statement', () => {
       ['Identifier']
     ]],
     ['Arguments', [
+      ['(', ')'],
+      ['(', 'ArgumentList', ')'],
+      ['(', 'ArgumentList', ',', ')']
+    ]],
+    ['ArgumentList', [
       ['AssignmentExpression'],
-      ['Arguments', ',', 'AssignmentExpression']
+      ['ArgumentList', ',', 'AssignmentExpression']
     ]],
     ['MemberExpression', [
       ['Primary'], 
       ['MemberExpression', '.', 'Identifier'], 
       ['MemberExpression', '[', 'Expression', ']'],
-      ['new', 'MemberExpression', '(', 'Arguments', ')']
+      ['new', 'MemberExpression', 'Arguments']
     ]],
     ['NewExpression', [
       ['MemberExpression'], 
       ['new', 'NewExpression']
     ]],
     ['CallExpression', [
-      ['MemberExpression', '(', ')'],
-      ['MemberExpression', '(', 'Arguments', ')'],
-      ['CallExpression', '.', 'Identifier'],
+      ['CoverCallExpressionAndAsyncArrowHead'],
+      ['CallExpression', 'Arguments'],
       ['CallExpression', '[', 'Expression', ']'],
-      ['CallExpression', '(', 'Arguments', ')']
+      ['CallExpression', '.', 'Identifier'],
+    ]],
+    ['CoverCallExpressionAndAsyncArrowHead', [
+      ['MemberExpression', 'Arguments']
     ]],
     ['LeftHandSideExpression', [
       ['MemberExpression'], 
@@ -429,22 +432,55 @@ describe('Test Return Statement', () => {
       }
     }
   }
-
-  it('Test return in ForStatement', () => {
-    const str = `
+  it('Test CallExpression With ReturnStatement', () => {
+    expect(evaluate(`
     let a = 1
-    function f () {
-      return a + 1
+    function f(){
+      return ++a
     }
     f()
-    `
-    const expression = parse(lex(str), map, initialState)
-    expect(execute(expression[0])).toEqual({
-      "type": "normal",
-      "value": {
-        "type": "return",
-        "value": 2
+    `, map, initialState)).toEqual({
+      type: 'normal', 
+      value: {
+        type: 'return',
+        value: 2
       }
     })
+    expect(globalEnv.get('a')).toBe(2)
+  })
+  it('Test CallExpression With ReturnStatement And Scope', () => {
+    expect(evaluate(`
+    let a = 1
+    function f() {
+      let a = 0
+      a += 2
+      return a
+    }
+    f()
+    `, map, initialState)).toEqual({
+      type: 'normal', 
+      value: {
+        type: 'return',
+        value: 2
+      }
+    })
+    expect(globalEnv.get('a')).toBe(1)
+  })
+  it('Test CallExpression With ReturnStatement, Scope And Parameters', () => {
+    expect(evaluate(`
+    let a = 1
+    function f(b) {
+      a += b
+      return a
+    }
+    f(2)
+    `, map, initialState)).toEqual({
+      type: 'normal', 
+      value: {
+        type: 'return',
+        value: 3
+      }
+    })
+    expect(globalEnv.get('a')).toBe(3)
   })
 })

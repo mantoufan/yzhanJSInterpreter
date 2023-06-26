@@ -5,7 +5,8 @@ module.exports = class {
   }
   #get(property) {
     if (property.value !== void 0) return property.value
-    return property.get()
+    if (typeof property.get === 'function') return property.get()
+    return property
   }
   getProperty(key) {
     let cur = this

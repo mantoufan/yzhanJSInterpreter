@@ -36,25 +36,32 @@ const rulesMap = new Map([
     ['Identifier']
   ]],
   ['Arguments', [
+    ['(', ')'],
+    ['(', 'ArgumentList', ')'],
+    ['(', 'ArgumentList', ',', ')']
+  ]],
+  ['ArgumentList', [
     ['AssignmentExpression'],
-    ['Arguments', ',', 'AssignmentExpression']
+    ['ArgumentList', ',', 'AssignmentExpression']
   ]],
   ['MemberExpression', [
     ['Primary'], 
     ['MemberExpression', '.', 'Identifier'], 
     ['MemberExpression', '[', 'Expression', ']'],
-    ['new', 'MemberExpression', '(', 'Arguments', ')']
+    ['new', 'MemberExpression', 'Arguments']
   ]],
   ['NewExpression', [
     ['MemberExpression'], 
     ['new', 'NewExpression']
   ]],
   ['CallExpression', [
-    ['MemberExpression', '(', ')'],
-    ['MemberExpression', '(', 'Arguments', ')'],
-    ['CallExpression', '.', 'Identifier'],
+    ['CoverCallExpressionAndAsyncArrowHead'],
+    ['CallExpression', 'Arguments'],
     ['CallExpression', '[', 'Expression', ']'],
-    ['CallExpression', '(', 'Arguments', ')']
+    ['CallExpression', '.', 'Identifier'],
+  ]],
+  ['CoverCallExpressionAndAsyncArrowHead', [
+    ['MemberExpression', 'Arguments']
   ]],
   ['LeftHandSideExpression', [
     ['MemberExpression'], 

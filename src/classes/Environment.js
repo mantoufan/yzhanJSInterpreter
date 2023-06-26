@@ -3,18 +3,21 @@ module.exports = class {
     this.vars = new Map()
     this.parent = parent
   }
-  set(property, value) {
-    if (this.vars.has(property) || !this.parent) {
-      this.vars.set(property, value)
+  declare(identifier) {
+    this.vars.set(identifier, void 0)
+  }
+  set(identifier, value) {
+    if (this.vars.has(identifier) || !this.parent) {
+      this.vars.set(identifier, value)
     } else {
-      this.parent.set(property, value)
+      this.parent.set(identifier, value)
     }
   }
-  get(property) {
-    if (this.vars.has(property) || !this.parent) {
-      return this.vars.get(property)
+  get(identifier) {
+    if (this.vars.has(identifier) || !this.parent) {
+      return this.vars.get(identifier)
     } else {
-      return this.parent.get(property)
+      return this.parent.get(identifier)
     }
   }
 }

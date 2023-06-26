@@ -4,7 +4,7 @@ module.exports = class extends JSFunction {
     super()
     this.then = then
   }
-  call(resolvedValue) {
-    this.executor.microTaskQueue.push(new Task(resolvedValue, this.then))
+  call(rejectReason) {
+    // this.executor.microTaskQueue.push(new Task(rejectReason, this.then))
   }
 }
