@@ -216,13 +216,39 @@ describe('Test Promise', () => {
   }
   
   it('Test New Promise', () => {   
-    // const str1 = `function thencallback (){b = b + 1}
-    // p.then(thencallback)
-    // b = b + 1`
     evaluate(`
     function callback (resolve){resolve()}
     const p = new Promise(callback)
     `, map, initialState)
-    expect(globalEnv.get('p').getProperty('then').hasOwnProperty('configurable')).toBeTruthy()
+    expect(globalEnv.get('p')).toBeTruthy()
+  })
+  
+  it('Test then function of promise instance using resolve', () => {   
+    evaluate(`
+    let b = 1
+    function fn(resolve){
+      resolve(1)
+    }
+    function then(resolveValue){
+      b = b + resolveValue
+    }
+    const p = new Promise(fn)
+    p.then(then)
+    `, map, initialState)
+    expect(globalEnv.get('b')).toBe(2)
+  })
+  it('Test then function of promise instance using reject', () => {   
+    evaluate(`
+    let b = 1
+    function fn(resolve, reject){
+      reject(1)
+    }
+    function then(rejectReason){
+      b = b + rejectReason
+    }
+    const p = new Promise(fn)
+    p.then(then)
+    `, map, initialState)
+    expect(globalEnv.get('b')).toBe(2)
   })
 })

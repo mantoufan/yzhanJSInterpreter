@@ -6,12 +6,11 @@ const JSFunction = require('../classes/JSFunction')
 const PromiseFunction = require('../classes/Promise/PromiseFunction')
 
 const globalEnv = new Enviroment()
-globalEnv.set('Promise', PromiseFunction)
 
 const executor = {
   envStack: [globalEnv],
-  microTaskQueue: [], // 微任务队列
-  runTaskQueue: [], // 宏任务队列
+  microTaskQueue: [],
+  runTaskQueue: [],
   async runTask() { // drain
     while (this.microTaskQueue.length > 0) {
       const microTask = this.microTaskQueue.shift()
@@ -27,7 +26,7 @@ const executor = {
     if (value instanceof Reference) return value.get()
     return value
   },
-  preProcesser: {}, // 预解析器：Find VariableDeclaration FuncitonDeclaration
+  preProcesser: {}, // Preparse: Find VariableDeclaration FuncitonDeclaration
   get currentEnv(){
     return this.envStack[this.envStack.length - 1]
   },
@@ -128,7 +127,8 @@ const executor = {
         const args = this.getValue(node.children[2])
         return jsFunction.construct(this.currentEnv, args[0])
       } else {
-        return new Reference(this.execute(node.children[0]), node.children[2])
+        const obj = this.getValue(node.children[0])
+        return obj.getProperty(node.children[2].value)
       }
     } else if (node.children.length === 4) {
       return new Reference(this.execute(node.children[0]), node.children[2])
@@ -147,14 +147,14 @@ const executor = {
     } else if (node.children.length === 2) {
       const jsFunction = this.execute(node.children[0])
       const args = this.execute(node.children[1])
-      return jsFunction.call(this.currentEnv, args)
+      return jsFunction.call(this.currentEnv, args) // 1
     }
   },
   CoverCallExpressionAndAsyncArrowHead(node) {
     if (node.children.length === 2) {
       const jsFunction = this.getValue(node.children[0])
       const args = this.execute(node.children[1])
-      return jsFunction.call(this.currentEnv, args)
+      return jsFunction.call(this.currentEnv, args) // 2
     }
   },
   LeftHandSideExpression(node) {
@@ -458,6 +458,8 @@ const executor = {
     return this.execute(node.children[0])
   }
 }
+
+globalEnv.set('Promise', new PromiseFunction(executor))
 
 module.exports = {
   executor,

@@ -4,21 +4,25 @@ const ResolveFunction = require('./ResolveFunction.js')
 const RejectFunction = require('./RejectFunction.js')
 const ThenFunction = require('./ThenFunction.js')
 module.exports = class PromiseFunction extends JSFunction {
+  constructor(executor) {
+    super(null, executor)
+  }
   call () {
     throw Error('Uncaught TypeError: Promise constructor cannot be invoked without \'new\'')
   }
-  static construct(currentEnv, func) {
-    const jsObject = new JSObject()
-    const resolve =new ResolveFunction()
-    const reject = new RejectFunction()
+  construct(currentEnv, func) {
+    const promiseInstance = new JSObject()
+    promiseInstance.setProperty('state', { value: 'pending' })
+    const resolve = new ResolveFunction(this.executor, promiseInstance)
+    const reject = new RejectFunction(this.executor, promiseInstance)
     try {
-      func.call(currentEnv, resolve, reject)
+      func.call(currentEnv, [resolve, reject])
     } catch(error) {
       reject.call(currentEnv, error)
     }
-    const then = new ThenFunction()
-    jsObject.setProperty('then', then)
-    return jsObject
+    const then = new ThenFunction(this.executor, promiseInstance, resolve, reject)
+    promiseInstance.setProperty('then', { value: then })
+    return promiseInstance
   }
 }
 

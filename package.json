@@ -1,6 +1,6 @@
 {
   "name": "yzhanjsinterpreter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A JavaScript Interpreter Using JS itself. JavaScript 解释器，包含词法分析、语法解析和执行",
   "main": "index.js",
   "scripts": {

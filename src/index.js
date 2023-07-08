@@ -8,6 +8,8 @@ module.exports = {
   executor,
   globalEnv,
   evaluate(code, map, initialState) {
-    return executor.execute(parse(lex(code), map, initialState)[0])
+    const res = executor.execute(parse(lex(code), map, initialState)[0])
+    executor.runTask()
+    return res
   }
 }
