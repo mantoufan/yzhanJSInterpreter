@@ -64,3 +64,6 @@ npm run build
 ```shell
 npm run dev
 ```
+## Todo
+1. Travese AST, using child to replace the parent when there is only one parent Node.  
+2. Treeshaking: earse unseded declarations.
