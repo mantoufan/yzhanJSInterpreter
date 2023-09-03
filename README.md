@@ -1,6 +1,5 @@
 # yzhanJSInterpreter  
 ![npm](https://img.shields.io/npm/v/yzhanjsinterpreter)
-![npm bundle size](https://img.shields.io/bundlephobia/minzip/yzhanjsinterpreter)
 ![npm](https://img.shields.io/npm/dt/yzhanjsinterpreter)
 [![GitHub license](https://img.shields.io/github/license/mantoufan/yzhanjsinterpreter)](https://github.com/mantoufan/yzhanjsinterpreter/blob/main/LICENSE)  
 A JavaScript Interpreter Using JS itself, implement `eval`  
