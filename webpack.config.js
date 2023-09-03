@@ -7,7 +7,6 @@ module.exports = {
     path: resolve('docs'),
     library: 'yzhanJSInterpreter',
     libraryTarget: 'umd',
-    libraryExport: 'default',
     globalObject: 'this',
     environment: {
       arrowFunction: false,

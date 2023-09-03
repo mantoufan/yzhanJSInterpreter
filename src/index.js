@@ -7,6 +7,9 @@ module.exports = {
   parse,
   executor,
   globalEnv,
+  execute(ast) {
+    return executor.execute(ast)
+  },
   evaluate(code, map, initialState) {
     const res = executor.execute(parse(lex(code), map, initialState)[0])
     executor.runTask()
