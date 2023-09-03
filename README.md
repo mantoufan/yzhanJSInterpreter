@@ -1,7 +1,6 @@
 # yzhanJSInterpreter  
-![npm](https://img.shields.io/npm/v/yzhanjsinterpreter)
-![npm bundle size](https://img.shields.io/bundlephobia/minzip/yzhanjsinterpreter)
-![npm](https://img.shields.io/npm/dt/yzhanjsinterpreter)
+[![npm](https://img.shields.io/npm/v/yzhanjsinterpreter)](https://www.npmjs.com/package/yzhanjsinterpreter)
+[![npm](https://img.shields.io/npm/dt/yzhanjsinterpreter)](https://www.npmjs.com/package/yzhanjsinterpreter)
 [![GitHub license](https://img.shields.io/github/license/mantoufan/yzhanjsinterpreter)](https://github.com/mantoufan/yzhanjsinterpreter/blob/main/LICENSE)  
 A JavaScript Interpreter Using JS itself, implement `eval`  
 JavaScript 解释器，包含词法分析、语法解析和执行。实现 `eval`
